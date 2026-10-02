@@ -1,40 +1,65 @@
+/*
+ * Assignment06
+ * MainActivity.java
+ * Lew Price
+ */
+
 package com.example.assignment6;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-public class MainActivity extends AppCompatActivity {
-    ListView listView;
-    ArrayAdapter<String> adapter;
+public class MainActivity extends AppCompatActivity
+        implements
+            GenresFragment.GenresListener,
+            BooksFragment.BooksListener,
+            BookDetailsFragment.BookDetailsListener
+{
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        listView = findViewById(R.id.lv_main);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, Data.getAllGenres());
-        listView.setAdapter(adapter);
+        if (savedInstanceState == null)
+        {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, GenresFragment.newInstance())
+                    .commit();
+        }
+    }
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String genre = parent.getItemAtPosition(position).toString();
-                ArrayList<Book> books = Data.getBooksByGenre(genre);
-            }
-        });
+    @Override
+    public void onGenreSelected(String genre)
+    {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, BooksFragment.newInstance(genre))
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onBookSelected(Book book)
+    {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, BookDetailsFragment.newInstance(book))
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onBackFromBooks()
+    {
+        getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void onBackFromBookDetails()
+    {
+        getSupportFragmentManager().popBackStack();
     }
 }

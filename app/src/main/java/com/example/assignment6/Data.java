@@ -1,10 +1,17 @@
+/*
+ * Assignment06
+ * Data.java
+ * Lewis Price
+ */
+
 package com.example.assignment6;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Data {
-    static private ArrayList<Book> allBooks = new ArrayList<Book>(){
+    static private ArrayList<Book> allBooks = new ArrayList<Book>()
+    {
         {
             add(new Book("The Lord of the Rings", "J.R.R. Tolkien", 1954, "Fantasy"));
             add(new Book("Pride and Prejudice", "Jane Austen", 1813, "Romance"));
@@ -102,23 +109,31 @@ public class Data {
     };
     static private HashMap<String, ArrayList<Book>> map;
 
-    static public ArrayList<String> getAllGenres(){
+    static public ArrayList<String> getAllGenres()
+    {
         setupMap();
         return new ArrayList<>(map.keySet());
     }
 
-    static public ArrayList<Book> getBooksByGenre(String genre){
+    static public ArrayList<Book> getBooksByGenre(String genre)
+    {
         setupMap();
         return map.get(genre);
     }
 
-    static private void setupMap(){
-        if(map == null){
+    static private void setupMap()
+    {
+        if(map == null)
+        {
             map = new HashMap<>();
-            for(Book book: allBooks){
+            for(Book book: allBooks)
+            {
                 if(map.containsKey(book.getGenre())){
+
                     map.get(book.getGenre()).add(book);
-                }else{
+                }
+                else
+                {
                     ArrayList<Book> list = new ArrayList<>();
                     list.add(book);
                     map.put(book.getGenre(), list);
